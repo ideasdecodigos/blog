@@ -1,0 +1,17 @@
+{% extends 'template.html' %}
+
+{% block title %}login{% endblock%}
+
+{% block body %}
+    <form class="main-forms" method="post">
+        <h1>Login</h1>
+        <label for="mail">Mail</label>
+        <input type="text" placeholder="Enter mail" required name="mail">
+        <label for="password">Password</label>
+        <input type="password" placeholder="Enter password" required name="password">
+        <input type="submit" value="login" >
+        
+    </form>
+
+
+{% endblock%}

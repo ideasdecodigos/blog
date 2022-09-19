@@ -1,0 +1,37 @@
+{% extends './template.html' %}
+
+{% block title %}index{% endblock %}
+
+{% block body %}
+
+ 
+   <h1>home</h1>
+   <button id="xxx">click</button>
+   <div class="div"></div>
+   <a href="/friends">amigos>>>>>>>>>>>>></a>
+
+   <script>
+      $(function(){
+         
+         $('#xxx').click(function(){
+            $.ajax({
+               url:'/xxx',
+               type:'post', 
+               data:{
+                  text:'hola mundo cruel',
+                  'name':'jose manuel'
+               },
+               success:function(data){
+                  $('.div').html(data)
+               },
+               error:function(eror){
+                  console.log(eror)
+               }
+            })
+         })
+      });
+   </script>
+
+
+{% endblock %}
+

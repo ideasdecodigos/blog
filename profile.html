@@ -1,0 +1,97 @@
+{% extends './template.html' %}
+
+{% block title %}create-post {% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/account.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="main-center">
+    <div class="account">
+        <div class="header">
+            {% if data['user']['wallpaper_user'] != "": %}
+                <img src="{{ data['user']['wallpaper_user'] }}">
+            {% endif %}
+        </div>
+        <div class="profile">
+        <div class="foto">
+            {% if data['user']['foto_user'] != "": %}
+            <img src="{{ data['user']['foto_user'] }}">
+            {% else: %}
+                <figure>
+                    <strong>{{ data['user']['name_user'][:1] }}</strong>
+                </figure>
+            {% endif %}
+            </div>
+            <h1>{{ data['user']["name_user"] }}</h1>
+            <summary>{{ data['user']["about_user"] }}</summary>
+            <br>
+            {% if 'id_user' in session %}
+                <button id="btnfollow" data-val="{{ data['user']['id_user'] }}">{{ data['follow'] }}</button>
+            {% else %}
+            <a href="/login" class="buttons" title="Login or register to follow this user">Enter</a>  
+            {% endif %}          
+            <a href="mailto:{{ data['user']['mail_user'] }}" class="buttons">Contact</a>
+            <!-- <script src="../static/js/script.js"></script> -->
+            <script>
+                $(function(){
+                    $('#btnfollow').click(function(){
+                        follow_unfollow(document.getElementById('btnfollow').getAttribute('data-val'), this, '#followers-counter');                        
+                    })
+                })
+            </script>
+            <div>
+                <ul>
+                    <li>
+                        <strong id="followers-counter"> {{ data['followers'] }}</strong>
+                        <span>Followers</span>
+                    </li>
+                    <li>
+                        <strong>{{ data['following'] }}</strong>
+                        <span>Following</span>
+                    </li>
+                    <li>
+                        {% if data['posts'][0][7] != NULL: %}
+                        <strong>{{ data['posts'][0][7] }}</strong>
+                        {% else: %}
+                        <strong>0</strong>
+                        {% endif %}
+                        <span>Posts</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#004242" fill-opacity="1" d="M0,32L720,224L1440,128L1440,320L720,320L0,320Z"></path>
+        </svg>
+        <div class="about">
+            <h3>About</h3>
+            <p>Mail: {{ data['user']["mail_user"] }}</p>
+            <p>Since: {{ data['user']["date_user"] }}</p>
+            {% if data['user']['country_user'] != "" %}
+                <p>Country: {{ data['user']["country_user"] }}</p>
+            {% endif %}
+            <summary>{{ data['user']["about_user"] }}</summary>
+        </div>
+        <div class="cont-author" id="cont-author">
+            <br><br><br>
+            <h3>Other Posts:</h3>
+            {% for post in data['posts']: %}
+            {% if post[1] != NULL: %}
+
+                <figure class="other-posts" onclick="location.href='/post/{{ post[0] }}'">
+                    <figcaption>
+                        <p>{{ post[2] }}</p>
+                        <h3>{{ post[1] }}</h3>
+                        <h4>{{ post[5] }}</h4>
+                    </figcaption>
+                </figure>
+            {% endif %}
+            {% endfor %}
+        </div>        
+    </div>
+</div>
+
+{% endblock %}

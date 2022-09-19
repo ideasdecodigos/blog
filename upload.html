@@ -1,0 +1,78 @@
+{% extends 'template.html' %}
+
+{% block title %}upload {% endblock %}
+
+{% block styles %}
+<style>
+    .img-container {
+        background-color: red;
+        background-image: url(../static/imgs/noneimg.jpg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        /* background-attachment: local; */
+
+        width: 90%;
+        max-width: 400px;
+        min-width: 200px;
+        min-height: 200px;
+        height: auto;
+        display: block;
+        margin: auto;
+    }
+
+    .img-container img {
+        width: inherit;
+        height: inherit;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="img-container">
+
+    {% if (data == 'fturl' or data == 'ftupload') and session['foto_user'].startswith('static/') %}
+    <img src="../{{ session['foto_user'] }}" alt="">
+    {% elif data == 'fturl' or data == 'ftupload' %}
+    <img src="{{ session['foto_user'] }}" alt="">
+    {% elif (data == 'wpurl' or data == 'wpupload') and session['wallpaper_user'].startswith('static/') %}
+    <img src="../{{ session['wallpaper_user'] }}" alt="">
+    {% elif data == 'wpurl' or data == 'wpupload' %}
+    <img src="{{ session['wallpaper_user'] }}" alt="">
+    {% endif %}
+</div>
+
+
+<form action="/upload/{{ data }}" method="POST" enctype="multipart/form-data">
+
+    {% if data =="fturl" or data == "ftupload" %}
+    {% if data == "fturl" %}
+    <input type="url" name="fpath" placeholder="Enter Image address">
+    {% else %}
+    <input type="file" name="fpath" accept="image/png, .jpeg, .jpg, image/gif">
+    {% endif %}
+    <input type="hidden" name="fcell" value="foto_user">
+    {% else %}
+    {% if data == "wpurl" %}
+    <label for="fpath"><b class="fa-solid fa-link"></b> Image Address</label>
+    <input type="url" name="fpath" placeholder="Enter Image address">
+    {% else %}
+    <label for="fpath"><b class="fa-solid fa-upload"></b> Upload Image</label>
+    <input type="file" name="fpath" accept="image/png, .jpeg, .jpg, image/gif">
+    {% endif %}
+    <input type="hidden" name="fcell" value="wallpaper_user">
+    {% endif %}
+    <input type="submit" value="Update" />
+</form>
+{% endblock %}
+
+{% block js %}
+
+<script>
+    $(function () {
+        $('input[type=url]').change(function () {
+            $('img').attr('src', $(this).val())
+        })
+    })
+</script>
+{% endblock %}

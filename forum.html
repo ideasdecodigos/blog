@@ -1,0 +1,163 @@
+{% extends './template.html' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/forum.css') }}">
+{% endblock %}
+
+{% block body %}
+
+
+<div class="main-center">
+
+    <h1>BLOG</h1>
+    <div class="forum">
+        <nav>
+            <div class="cont-browser">
+                <input type="search" id="input-browser"  placeholder="Search by filter">
+                <i id="bkd" class="fa fa-search"></i>
+            </div>
+            <script>
+                $("#input-browser").keyup(function(){
+			if($(this).val() != ''){
+				$('#bkd').addClass('fa-spinner fa-pulse')
+			}else{
+				$('#bkd').removeClass('fa-spinner fa-pulse')
+			}
+		})
+            </script>
+        </nav>
+        <section>
+            <div class="posts"> </div>
+            <div id="loading"></div>
+        </section>
+    </div>
+</div>
+<div class="main-right">
+    <div class="newest"></div>
+    <div class="visited"></div>
+    <div class="commented"></div>
+    <div class="liked"></div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="{{ url_for('static', filename='js/popular_posts.js') }}"></script>
+<script>
+    function posts(position) {
+        $.post("/forum", { currentPage: position }, function (data) {
+            for (const key in data) {
+                const post = data[key];
+
+                let tags = "";
+                for (const tag in post[4]) {
+                    tags += " <b>#" + post[4][tag] + "</b>";
+                }
+
+                let bgimg = `background: url('` + post[7] + `');
+                background-size: cover;background-position: center; `;
+
+                $('.posts').append(`    
+                <div class="card-post" onclick="location.href='../post/`+ post[0] + `';">
+                    <div class="bg-img" style="`+ bgimg + `">
+                        <ul>
+                            <li><i class="fa-solid fa-eye"></i> `+ post[8] + `</li>
+                            <li><i class="fa-solid fa-comment"></i> `+ post[9] + `</li>
+                            <li><i class="fa-solid fa-heart"></i> `+ post[10] + `</li>
+                        </ul>
+                        <cite>@`+ post[6] + `</cite>
+                    </div>
+                    <figure>
+                        <figcaption>                            
+                            <h2><strong>`+ post[0] + `</strong> ` + post[1] + `</h2>
+                            <p>`+ tags + `</p>
+                            <div class="component">
+                                <blockquote class="quote EN">`+ post[2] + `</blockquote>
+                                <cite>`+ post[5] + `</cite>
+                            </div>                            
+                        </figcaption>
+                    </figure>                    
+                </div>
+                `)
+            }
+        });
+    }
+
+    
+    
+    $(document).ready(function () {
+        //POPULAR POSTS
+        show_popular_posts();
+
+        //SEARCHING BY FILTER
+        $('#input-browser').keyup(function () {
+            if ($(this).val() == "") {
+                posts(1);
+            } else {
+                $.post("{{ url_for('forum_filter') }}", { browser: $(this).val() }, function (data) {
+                    $('.posts').html('');
+                    for (const key in data) {
+                        const post = data[key];
+                        let tags = "";
+                        for (const tag in post[4]) {
+                            tags += " <b>#" + post[4][tag] + "</b>";
+                        }
+
+                        let bgimg = `background: url('` + post[7] + `');
+                background-size: cover;background-position: center; `;
+
+                        $('.posts').append(`    
+                <div class="card-post" onclick="location.href='../post/`+ post[0] + `';">
+                    <div class="bg-img" style="`+ bgimg + `">
+                        <ul>
+                            <li><i class="fa-solid fa-eye"></i> `+ post[8] + `</li>
+                            <li><i class="fa-solid fa-comment"></i> `+ post[9] + `</li>
+                            <li><i class="fa-solid fa-heart"></i> `+ post[10] + `</li>
+                        </ul>
+                        <cite>`+ post[6] + `</cite>
+                    </div>
+                    <figure>
+                        <figcaption>                            
+                            <h2><strong>`+ post[0] + `</strong> ` + post[1] + `</h2>
+                            <p>`+ tags + `</p>
+                            <div class="component">
+                                <blockquote class="quote EN">`+ post[2] + `</blockquote>
+                                <cite>`+ post[5] + `</cite>
+                            </div>                            
+                        </figcaption>
+                    </figure>                    
+                </div>
+                `)
+                    }
+                });
+            }
+        });
+
+
+        let page = 1;
+        posts(page);
+
+        $(window).scroll(function () {
+            // console.log($(window).scrollTop(), $(window).height(), $(document).height());
+            if (($(window).scrollTop() + $(window).height()) >= ($(document).height() - 400)) {
+                page++;
+                posts(page);
+                setTimeout(() => {
+                    if (($(window).scrollTop() + $(window).height()) >= ($(document).height() - 400)) {
+                        $("#loading").html(`
+                            <img src="{{ url_for('static', filename='imgs/updated.gif') }}"><br>
+                            <b>You're all caught up!</b>`);
+                    }
+                }, 1000);
+
+            }
+
+        })
+    })
+</script>
+
+
+{% endblock %}

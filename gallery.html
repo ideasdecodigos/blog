@@ -1,0 +1,12 @@
+{% extends './template.html' %}
+
+{% block title %}Gallery{% endblock %}
+
+{% block body %}
+
+<h1>Gallery</h1>
+    {% for x in data %}
+        <p>{{ x }}</p>
+    {% endfor %}
+
+{% endblock %}

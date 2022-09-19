@@ -1,0 +1,11 @@
+{% extends './template.html' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body %}
+<h1>Do you have Questions?</h1>
+<a title="Escribir por Correo " href="mailto:ideasdecodigos@gmail.com" class="icon-mail" id="mail">Contact me.</a>
+
+<img src="{{ url_for('static', filename='imgs/imgclear.png') }}" alt="" width="200">
+
+{% endblock %}

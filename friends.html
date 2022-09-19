@@ -1,0 +1,82 @@
+{% extends './template.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="../static/css/friends.css">
+<div class="cont-friends">
+	<div class="cont-browser">
+		<input type="search" id="input-browser" onkeyup="myFunction()" placeholder="Search for names..">
+        <i id="bkd" class="fa fa-search"></i>
+    </div>
+
+	<div class="follow">
+	</div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+	$("#input-browser").keyup(function(){
+			if($(this).val() != ''){
+				$('#bkd').addClass('fa-spinner fa-pulse')
+			}else{
+				$('#bkd').removeClass('fa-spinner fa-pulse')
+			}
+		})
+
+	$(function () {
+		
+
+		$.ajax({
+			url: "{{ url_for('randomUsers') }}",
+			type: 'POST',
+			data: { id_user: "{{ session['id_user'] }}" },
+			success: function (data) {
+				for (const key in data) {
+					const user = data[key];
+					$('.follow').append(`
+							<figure>
+								<i class="fa fa-xmark" onclick="$(this).parent().hide()"></i>
+								<div onclick="location.href='/profile/`+ user[0] + `'">
+									<div class="user-foto">`+ user[3] + `</div>
+									<div class="search">
+										<figcaption>`+ user[1] + `</figcaption>
+										<blockquote>`+ user[2] + `</blockquote>
+									</div>									
+									<strong>`+ user[5] + ` <em>Following</em></strong>
+									<strong class='fl'>`+ user[6] + ` <em>Followers</em></strong>
+								</div>
+								<div class="btn">
+									<button class="`+ user[4] + `" onclick="follow_unfollow(` + user[0] + `,$(this), $(this).parents().siblings('div').children('strong.fl'))">` + user[4] + `</button>
+								</div>
+							</figure>
+						`)
+				}
+			}
+		})
+	})
+
+
+	function myFunction() {
+		// Declare variables
+		let filter, tag, i, txt;
+		filter = document.getElementById('input-browser').value.toUpperCase();
+
+		// Loop through all list items, and hide those who don't match the search query
+		for (i = 0; i < $('figure').length; i++) {
+			tag = $('.search')[i].getElementsByTagName("figcaption")[0];
+			if ($(tag).text().toUpperCase().indexOf(filter) > -1) {
+				$('figure')[i].style.display = '';
+			} else {
+				$('figure')[i].style.display = 'none';
+			}
+		}
+	}
+</script>
+{% endblock %}

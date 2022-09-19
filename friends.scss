@@ -1,0 +1,67 @@
+@import 'mixins';
+
+.cont-friends{
+	padding: 50px;
+	text-align: center;
+	max-width: 800px;
+	margin: auto;
+	@include browser;
+.follow{
+	// display: grid;
+	figure{
+		margin: 10px;
+		background-color: rgba(0, 0, 0, 0.5);
+		color: #eee;
+		position: relative;
+		padding: 10px;
+		border-radius: 5px;
+		text-align: left;
+		div{cursor: pointer;
+		.user-foto{
+			width: 50px;
+			height: 50px;
+			background-color: black;
+			color: white;
+			display: block;
+			border-radius: 50%;
+			overflow: hidden;
+			text-align: center;
+			line-height: 50px;
+			font-size: 2rem;
+			float: left;
+			margin-right: 10px;
+		}
+		figcaption{ font-weight: bold;}
+		blockquote{ font-size: 12px;}
+		strong em{
+			font-size: 10px;
+		}
+		}
+		i{
+			cursor: pointer;
+			float: right;
+			color: $bg-parallel;
+		}
+		.btn{
+			
+			clear: both;
+			height: 20px;
+			button{
+				cursor: pointer;
+				float: right;
+				padding:2px 5px;
+				border: thin solid #eee;
+				background-color: transparent;
+				color: #eee;
+				border-radius: 10px;
+			}
+			button.Unfollow{
+				color: #aaa;
+				border: thin solid #aaa;
+			}
+		}
+
+	// }
+	}
+}
+}

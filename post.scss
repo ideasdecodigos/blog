@@ -1,0 +1,311 @@
+@import "root", "mixins";
+
+body {
+    background-color: inherit;
+
+    .cont-body {
+        background-color: inherit;
+
+        .main-center {
+            background-color: inherit;
+        }
+    }
+}
+
+.cont-menu {
+    display: inline-flex;
+    gap: 5px;
+    position: fixed;
+    top: 45px;
+    background-color: inherit;
+    z-index: 5;
+    transition: 0.5s;
+
+    a,
+    cite {
+        font-size: 12px;
+        padding: 10px auto;
+        text-decoration: none;
+        margin: 5px;
+        color: inherit;
+        text-align: center;
+        text-transform: uppercase;
+        position: relative;
+        transition: .3s;
+
+        &:after {
+            position: absolute;
+            transition: .3s;
+            content: '';
+            width: 0;
+            left: 50%;
+            bottom: -3px;
+            height: 3px;
+            background: $bg-parallel;
+            border-radius: 5px;
+        }
+
+        &:hover {
+            cursor: pointer;
+
+            &:after {
+                width: 100%;
+                left: 0;
+            }
+        }
+    }
+}
+
+.cont-post,
+.cont-addComments,
+.cont-comments,
+.cont-author {
+    padding: 5%;
+}
+
+.cont-post {
+    position: relative;
+
+    cite a {
+        text-decoration: none;
+        color: $bg-parallel;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .socials {
+        display: flex;
+        gap: 5px;
+
+        i {
+            @include buttons;
+        }
+
+        .admin {
+            display: flex;
+            display: none;
+            gap: inherit;
+
+            a {
+                text-decoration: none;
+            }
+        }
+    }
+
+    .liked {
+        background-color: $bg-parallel;
+    }
+
+    .cont-tags {
+        text-align: right;
+        font-size: 12px;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+        margin: 10px;
+
+        strong {
+            display: inline-block;
+            background-color: $bg-parallel;
+            color: $fg-light;
+            text-shadow: 0.1px 0.5px 2px black;
+            border-radius: 2px;
+            padding: 1px 5px;
+            margin: 2px;
+            position: relative;
+            clip-path: polygon(6px 0px, 100% 0px, 100% 100%, 0% 100%, 0% 6px);
+
+            &:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 6px;
+                height: 6px;
+                background: #ccc;
+                box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.9);
+                border-radius: 0 0 6px 0;
+                transition: transform 500ms;
+            }
+
+        }
+    }
+
+    .analytic {
+
+        display: flex;
+        gap: 10px;
+        color: $bg-parallel;
+        // color: $fg-light;
+        margin-top: 50px;
+        text-shadow: 1px 0px 0 black;
+    }
+
+}
+
+.active {
+    color: $bg-parallel;
+}
+
+.cont-addComments .socials {
+    display: inline-flex;
+    gap: 5px;
+
+    i {
+        @include buttons;
+        display: inline;
+        margin-top: 5px;
+    }
+
+    .share {
+        display: none;
+        gap: inherit;
+        margin-top: 8.5px;
+        // display: inline-block;
+
+        i{
+            @include buttons;
+
+        }
+    }
+
+}
+
+.cont-comments {
+
+    .show-comments {
+        margin: 20px;
+        text-align: left;
+
+        .date {
+            display: inline-block;
+            background-color: $bg-parallel;
+            border-radius: 3px;
+            padding: 5px;
+            color: $fg-light;
+            margin: 0px auto;
+
+        }
+
+        figure {
+            position: relative;
+            margin: 10px;
+            min-width: 200px;
+            max-width: 90%;
+            width: 100%;
+            color: $fg-light;
+            text-align: left;
+            box-shadow: none !important;
+            background: linear-gradient(to bottom, $bg-parallel 40%, bg-primary($tone) 60%);
+            overflow: hidden;
+            border-radius: 10px;
+
+            p {
+                padding: 10px;
+
+                a {
+                    text-decoration: none;
+                    color: $fg-light;
+                }
+
+                //EXTREMO SUPERIOR
+                &:before {
+                    bottom: 100%;
+                    left: 90%;
+                    border: solid transparent;
+                    content: "";
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    pointer-events: none;
+                    border-color: rgba(136, 183, 213, 0);
+                    border-bottom-color: #ddd;
+                    border-width: 15px;
+                    margin-left: -15px;
+                }
+            }
+
+            blockquote {
+                display: block;
+                position: relative;
+                background-color: #ddd;
+                padding: 25px 50px;
+                line-height: 1em;
+                color: black;
+
+
+                //EXTREMO INFERIOR
+                &:after {
+                    top: 100%;
+                    left: 70%;
+                    border: solid transparent;
+                    content: "";
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    pointer-events: none;
+                    border-color: transparent;
+                    border-top-color: #ddd;
+                    border-width: 25px;
+                    // margin-right:-30px;
+                }
+
+
+                //COMILLAS DE FONDO
+                &:before {
+                    font-family: 'FontAwesome';
+                    content: "\201C";
+                    position: absolute;
+                    font-size: 5rem;
+                    opacity: 0.3;
+                    font-style: normal;
+                    top: 20px;
+                    left: 20px;
+                    color: #999;
+                }
+
+            }
+
+            .author {
+                position: relative;
+                padding: 5px 10px;
+                color: $fg-light;
+
+                em {
+                    font-size: 1rem;
+                    display: block;
+
+                    a {
+                        text-decoration: none;
+                        color: inherit;
+                    }
+
+                }
+
+                i {
+                    margin-right: 10px;
+                    cursor: pointer;
+                }
+
+                .adm {
+                    position: absolute;
+                    right: 0px;
+                    bottom: 10px;
+                    display: flex;
+                }
+            }
+        }
+    }
+}
+
+@include otherPosts;
+
+.main-right{
+    @include populars;
+}
+
+.main-left{
+    
+}

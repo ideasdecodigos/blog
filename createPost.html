@@ -1,0 +1,24 @@
+{% extends 'template.html' %}
+
+{% block title %}create-post {% endblock %}
+
+{% block body %}
+
+<script>
+  $(function () {
+    tinyMCEX('textarea', 'oxide', 'writer', 800, true);
+  })
+</script>
+
+<form method="post" class="main-forms">
+  <input type="text" name="title" placeholder="Post title here..." required>
+  <input type="text" name="category" placeholder="Enter categories here.." required>
+  <input type="submit" value="Publish">
+  <textarea name="post" cols="30" rows="10" placeholder="Post content here..." ></textarea>
+</form>
+{% endblock %}
+{% block js %}
+<script src="https://cdn.tiny.cloud/1/ctu01zz29dk3dpxzyu24iwskih23n8wb5nxka0w3z0xk6reh/tinymce/6/tinymce.min.js"
+  referrerpolicy="origin"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}

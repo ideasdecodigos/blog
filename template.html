@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="IDCSchool oficial website">
+    <meta name="keywords" content="programing, Development, IDCSchool, blog, forum">
+    <meta name="author" content="Juan C. Paniagua R.">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='imgs/imgclear.png') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='imgs/imgclear.png') }}" type="image/x-icon">
+
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block css %}{% endblock %}
+    <script src="{{ url_for('static', filename='lib/jquery-3.6.0.min.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/d8f67b4e4d.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    
+    <header>
+        <nav>
+            <div class="main-menu" id="scroll-mn">
+                <span class="logo">
+                    <img src="{{ url_for('static', filename='imgs/imgclear.png')}}" alt="logo"
+                        onclick="location.href='/';">
+                    <strong onclick="location.href='/';">IDCSchool</strong>
+                </span>
+                <div class="menu-list">
+                {% if 'id_user' in session: %}
+                <i class="fa fa-user-check" id="main-menu-user"> <span>{{ session['name_user'].split(' ')[0] }}</span></i>
+                {% else %}
+                <i class="fa fa-right-to-bracket" onclick="location.href='/login';"><span>Login</span></i>
+                <i class="fa fa-user-plus" id="main-gi" onclick="location.href='/signup';"><span>Signup</span></i>
+                {% endif %}
+
+                <i class="fa fa-users-gear" onclick="location.href='/randomUsers';"><span>users</span></i>
+                <i class="fa fa-shield-heart" onclick="location.href='/about';"><span>About</span></i>
+                <i class="fa fa-earth-americas" onclick="location.href='/forum';"><span>Forum</span></i>
+                <i class="fa fa-bell" onclick="$('.notifications').toggle();" id="btn-notification"><span>Alerts</span></i>
+                <i class="fa fa-circle-half-stroke" id="main-menu-theme"><span>Theme</span></i>
+                
+            </div>
+            {% if 'id_user' in session: %}
+            <div class="dropdown" id="sub-menu-user">
+                <a href="{{ url_for('account') }}">Account <span class="fa fa-chalkboard"></span></a>
+                <a href="{{ url_for('createPost') }}">New Post <span class="fa fa-file-word"></span></a>
+                <a href="{{ url_for('updateUser') }}">Settings <span class="fa fa-gear"></span></a>
+                <a href="{{ url_for('friends') }}">Friends <span class="fa fa-users-gear"></span></a>
+                <hr>
+                <a href="{{ url_for('logout') }}">Logout <span class="fa fa-sign-out"></span></a>
+                <a href="#">Inbox <span class="fa fa-inbox"></span></a>
+            </div>
+            {% endif %}
+
+            <div class="dropdown" id="sub-menu-theme">
+                <p id="default">Default <span class="fa fa-circle-half-stroke"></span></p>
+                <p id="dark">Dark <span class="fa fa-moon"></span></p>
+                <p id="light">Light <span class="fa fa-sun"></span></p>
+            </div>
+
+            <div class="notifications "></div>
+        </div>
+        </nav>
+        <script>
+            $(function () {
+                showAlerts();
+            });
+            
+            function showAlerts() {
+                let trash = "", icon = "", url = "", fdate = "";
+                $(".notifications").html(`<i class='quit fa fa-delete-left' onclick="$('#btn-notification').click();"></i>`);
+
+                $.post("{{ url_for('notifications') }}", { info: '' }, function (data) {
+                    for (const key in data) {
+                        const alert_info = data[key];
+                        if (data[key] != undefined) {
+                            if (alert_info[7] == "true" || alert_info[5] == "public") {
+                                if (alert_info[5] == "private") {
+                                    trash = `<span class="fa fa-trash" onclick="delAlerts('` + alert_info[0] + `');"></span>`;
+                                } else { trash = ""; }
+
+                                switch (alert_info[6]) {
+                                    case "users":
+                                        icon = "<i class='fa fa-user fa-beat'></i>";
+                                        url = "location.href='/profile/" + alert_info[2] + "'";
+                                        break;
+                                    case "posts":
+                                        icon = "<i class='fa fa-file-word fa-beat'></i>";
+                                        url = "location.href='/post/" + alert_info[1] + "'";
+                                        break;
+                                    case "comments":
+                                        icon = "<i class='fa fa-comments fa-beat'></i>";
+                                        url = "location.href='/post/" + alert_info[1] + "#comment" + alert_info[3] + "'";
+                                        break;
+                                    case "posts_likes":
+                                        icon = "<i class='fa fa-thumbs-up fa-beat'></i>";
+                                        url = "location.href='/post/" + alert_info[1] + "#comment" + alert_info[3] + "'";
+                                        break;
+                                    case "comments_likes":
+                                        icon = "<i class='fa fa-heart fa-beat'></i>";
+                                        url = "location.href='/post/" + alert_info[1] + "'";
+                                        break;
+                                    case "followers":
+                                        icon = "<i class='fa fa-users fa-beat'></i>";
+                                        url = "location.href='/profile/" + alert_info[2] + "'";
+                                        break;
+                                    default:
+                                        icon = "<i class='fa fa-inbox fa-beat'></i>";
+                                }
+                                if (fdate != alert_info[8].slice(0, 17)) {
+                                    $('.notifications').append("<div class='date'>" + alert_info[8].slice(0, 17) + "</div>");
+                                    fdate = alert_info[8].slice(0, 17);
+                                }
+
+
+                                $('.notifications').append(`                        
+                                    <div class="alerts-`+ alert_info[6] + `" onclick="readAlerts('` + alert_info[0] + `');` + url + ` ">
+                                        <div class="info-tab">`+ icon + ` </div>
+                                        `+ trash + `
+                                        <strong>`+ alert_info[6].toUpperCase() + `!</strong> 
+                                        <p>`+ alert_info[4] + `</p> 
+                                        <span>`+ alert_info[8].slice(17, -3) + `</span> 
+                                        
+                                    </div>                     
+                                `)
+                            }
+                        }
+                    }
+                });
+            }
+
+            function readAlerts(id) {
+                $.post("{{ url_for('readAlerts') }}", { id_alert: id }, function (data) {
+                    $('.notifications').html('');
+                    showAlerts();
+                });
+            }
+            
+            function delAlerts(id) {
+                $('.notifications').html('');
+                $.post("{{ url_for('delAlerts') }}", { id_alert: id }, function (data) {
+                    showAlerts();
+                });
+            }
+            
+            $('#main-menu-user').click(function () {
+                $('#sub-menu-theme').slideUp()
+                $('#sub-menu-user').slideToggle()
+            });
+            
+            $('#main-menu-theme').click(function () {
+                $('#sub-menu-user').slideUp()
+                $('#sub-menu-theme').slideToggle()
+            });
+            
+            $('.dropdown').click(function () {
+                $(this).hide()
+            });
+
+        </script>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class=flashes>
+        {% for category, message in messages %}
+        <script>
+            function alerta() {
+                Swal.fire({
+                    icon: '{{ category }}',
+                    title: 'IDCSchool',
+                    html: '{{ message }}',
+                    timer: 5000
+                })
+            }
+        </script>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="cont-body ">
+        {% block body %} {% endblock %}
+    </div>
+    {% block js %} {% endblock %}
+
+    <footer>
+        <a href="#top" id="backtotop" title="Back to top"> <i class="fa fa-angles-up"></i></a>
+        <div class="share">
+            <h3>Share</h3>
+            <a href="" title="Share on Whatsapp" class="fa-brands fa-whatsapp-square" id="whatsapp"
+                data-action="share/whatsapp/share" target="_blank"></a>
+            <a href="javascript:void(0)" title="Share on FaceBook" id="s-facebook" class="fa-brands fa-facebook-square"
+                onclick="javascript:compartirEnRedes('http://www.facebook.com/sharer.php?u=')"></a>
+            <a href="javascript:void(0)" title="Share on Twitter" id="s-witter" class="fa-brands fa-twitter-square"
+                onclick="javascript:compartirEnRedes('http://twitter.com/share?text=Teke a look at this website: &url=')"></a>
+            <a href="javascript:void(0)" title="Share on Linkedin" id="s-linkedin" class="fa-brands fa-linkedin"
+                onclick="javascript:compartirEnRedes('http://www.linkedin.com/shareArticle?mini=true&url=')"></a>
+            <a href="javascript:void(0)" class="fa-brands fa-tumblr-square" id="s-tumblr"
+                onclick="javascript:compartirEnRedes('http://www.stumbleupon.com/badge/?url=')"></a>
+            <a href="javascript:void(0)" title="Share on Pinterest" id="s-pinterest"
+                class="fa-brands fa-pinterest-square"
+                onclick="javascript:shareTo('http://pinterest.com/pin/create/button/?url=','&media=../src/img/cute.jpg')"></a>
+            <a href="javascript:void(0)" class="fa-brands fa-reddit-square" id="s-reddit"
+                onclick="javascript:compartirEnRedes('http://www.reddit.com/submit?url=')"></a>
+            <a href="javascript:void(0)" title="Share by Correo" id="mailbox" class="fa fa-envelope"></a>
+            <!-- http://pinterest.com/pin/create/button/?url=[URLcodificada]&media=[MEDIA] -->
+        </div>
+        <script type="text/javascript">
+            function compartirEnRedes(url) {
+                window.open(url + window.location.href, 'sharer', 'toolbar=0,status=0,width=648,height=395');
+                return true;
+            }
+            function shareTo(url, media) {
+                window.open(url + window.location.href + media, 'sharer', 'toolbar=0,status=0,width=648,height=395');
+                return true;
+            }
+            $(function () {
+                document.getElementById('mailbox').href = "mailto:?subject=Teke a look at this website: &body=Teke a look at this website:  " + window.location.href + "\n\n";
+
+                if (screen.width < 700) {
+                    document.getElementById('whatsapp').href = "whatsapp://send?text=Teke a look at this website:  " + window.location.href;
+                } else {
+                    document.getElementById('whatsapp').href = "https://web.whatsapp.com/send?text=Teke a look at this website: " + window.location.href;
+                }
+            });            
+        </script>
+
+        <ul>
+            <li>Developed by Juan C. Paniagua</li>
+            <li id="date"></li>
+        </ul>
+        <form action="https://www.paypal.com/donate" method="post" target="_blank">
+            <input type="hidden" name="hosted_button_id" value="2UUWMR9S7DMBS" />
+            <input type="image" src="https://s3.amazonaws.com/hub-central/uploads/1624331404_paypal-donate.png"
+                width="170px" name="submit" title="PayPal - The safer, easier way to pay online!"
+                alt="Donate with PayPal button" />
+        </form>
+        <div class="followme">
+            <h3>Follow</h3>
+            <a href="https://www.facebook.com/ideas.decodigos.3" target="_blank" id="facebook"
+                title="followme on FaceBook" class="fa-brands fa-facebook-square"></a>
+            <a href="https://twitter.com/de_ideas" target="_blank" id="twitter" class="fa-brands fa-twitter-square"
+                title="followme on Twitter"></a>
+            <a href="https://ideasdecodigos.tumblr.com/" target="_blank" id="tumblr" class="fa-brands fa-tumblr-square"
+                title="followme on Tumblr"></a>
+            <a href="https://www.instagram.com/idc_advances/?hl=es-la" target="_blank" id="instagram"
+                class="fa-brands fa-instagram-square" title="followme on Instagram"></a>
+            <a href="https://www.youtube.com/channel/UCwN59VLiuiL_GMX3fHTOf_A?view_as=subscriber" target="_blank"
+                id="youtube" class="fa-brands fa-youtube-square" title="followme on YouTube"></a>
+            <a href="https://www.linkedin.com/in/ideas-de-c%C3%B3digos-1b4655163/" target="_blank" id="linkedin"
+                class="fa-brands fa-linkedin" title="followme on Linkedin"></a>
+            <a href="https://www.pinterest.es/ideasdecodigos/" target="_blank" id="pinterest"
+                class="fa-brands fa-pinterest-square" title="followme on Pinterest"></a>
+        </div>
+    </footer>
+    <script>
+        let dt = new Date();
+        let moths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        $('#date').html("All rights reserved. © " + moths[dt.getMonth()] + " " + dt.getFullYear() + " IDCSchool");
+    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

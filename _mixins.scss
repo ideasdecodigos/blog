@@ -1,0 +1,428 @@
+@import "root";
+
+@mixin fontAwsomeFormat {
+    i {
+        padding: none;
+        margin: none;
+        box-sizing: border-box;
+        border: none;
+        color: $bg-parallel;
+    }
+}
+
+@mixin browser {
+
+
+    .cont-browser {
+        display: inline-flex;
+        border: solid 2px grey;
+        border-radius: 5px;
+        padding: 10px;
+        width: 80%;
+        max-width: 400px;
+        margin: auto;
+
+        input {
+            background-color: transparent;
+            width: 100%;
+            border: none;
+            offset: none;
+            outline: none;
+        }
+
+    }
+}
+
+@mixin sub-menu {
+    .sub-menu {
+        position: absolute;
+        top: 30px;
+        background: bg-primary($tone + 5);
+        display: none;
+        padding: 0px;
+
+        li,
+        li a {
+            display: flex;
+            margin: 5px;
+            gap: 5px;
+            @include fontAwsomeFormat();
+
+            &:hover {
+                // border-radius: 50%;
+                // padding: 5px;
+                background: bg-primary($tone + 10);
+            }
+        }
+
+        &:after {
+            bottom: 100%;
+            left: 50%;
+            border: solid transparent;
+            content: "";
+            position: absolute;
+            border-bottom-color: bg-primary($tone + 5);
+            ;
+            border-width: 15px;
+            margin-left: -15px;
+        }
+    }
+}
+
+@mixin links($bg-ground: white, $fg-color: black, $width: 300px) {
+    background-color: $bg-ground;
+    color: $fg-color;
+
+    ul {
+        width: 100%;
+        display: flex;
+        list-style: none;
+        width: 100%;
+        flex-wrap: wrap;
+        border-bottom: thick solid blue;
+        position: relative;
+
+        li {
+            // position: absolute;
+            background-color: $width;
+            padding: 0 20px;
+            border-bottom: thick solid pink;
+            margin-top: 5px;
+
+            a {
+                text-decoration: none;
+            }
+
+            &:hover {
+                border: thick solid red;
+                border-bottom: thick solid #fff;
+                background-color: white;
+            }
+        }
+
+    }
+
+}
+
+@mixin editPic() {
+    i {
+        display: none;
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background-color: white;
+        color: black;
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: .5s;
+        border: 2px solid bg-primary($tone);
+        color: $bg-parallel;
+
+        &:hover {
+            color: bg-primary($tone);
+        }
+
+        &:hover~.edit {
+            display: grid;
+        }
+    }
+
+    .edit {
+        position: absolute;
+        background: bg-primary($tone);
+        box-shadow: 1px 1px 3px $fg-light;
+        width: 100px;
+        padding: 5px;
+        gap: 5px;
+        text-align: center;
+        right: -5px;
+        bottom: -37px;
+        display: none;
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            font-size: 12px;
+
+        }
+
+        &:hover {
+            display: grid;
+        }
+    }
+
+    .edit:after {
+        bottom: 100%;
+        left: 70%;
+        border: solid transparent;
+        content: "";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: transparent;
+        border-bottom-color: bg-primary($tone);
+        border-width: 10px;
+        margin-left: -10px;
+    }
+}
+
+@mixin mx-post() {
+    a {
+        text-decoration: none;
+        position: relative;
+    }
+
+    em,
+    cite {
+        position: absolute;
+        right: 10px;
+        color: $bg-dark;
+    }
+
+    max-width: 600px;
+    padding:30px 20px;
+    margin: 40px auto;
+    overflow: hidden;
+    display: grid;
+    border-radius: 50px;
+    border-radius: 12px;
+    background: #f2f2f2;
+    box-shadow: 14px 14px 25px #797979,
+    -14px -14px 25px #ffffff;
+}
+
+@mixin buttons ($width: none, $margin: none, $padding: 5px, $font-size: none) {
+    width: $width;
+    margin: $margin;
+    padding: $padding;
+    font-size: $font-size;
+    text-decoration: none;
+    cursor: pointer;
+    gap: 10;
+    background-color: bg-primary($tone);
+    color: $fg-light;
+    border: none;
+    border-radius: 3px;
+
+}
+
+@mixin otherPosts {
+
+
+    .cont-author {
+
+        // background-color: blue;
+        h3,
+        ul {
+            text-align: left;
+
+            li a {
+                text-decoration: none;
+                color: $bg-parallel;
+            }
+        }
+
+        text-align: center;
+
+
+        .other-posts {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.25), inset 0px -1px 2px rgba(255, 255, 255, 0.9);
+            color: #888;
+            display: inline-block;
+            font-size: 1em;
+            margin: 20px 10px;
+            max-width: 300px;
+            min-width: 250px;
+            min-height: 270px;
+            position: relative;
+            text-align: center;
+            width: 100%;
+            border-radius: 5px;
+            border-top: 10px solid $bg-parallel;
+            cursor: pointer;
+
+
+            p {
+                text-align: justify;
+                font-style: italic;
+                margin-bottom: 10px;
+                overflow: hidden;
+                max-width: 100%;
+            }
+
+            h3 {
+                color: $bg-parallel;
+                font-size: 1em;
+            }
+
+            figcaption {
+                padding: 10%;
+                margin: 0 auto;
+                overflow: hidden;
+
+
+                &:before {
+                    text-align: center;
+                    transform: translateX(-50%);
+                    background-color: #fff;
+                    border-radius: 50%;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+                    color: $bg-parallel;
+                    content: "\f10e";
+                    font-family: 'FontAwesome';
+                    font-size: 2em;
+                    left: 50%;
+                    line-height: 60px;
+                    position: absolute;
+                    top: -35px;
+                    width: 60px;
+                }
+            }
+        }
+
+        .other-posts *,
+        .other-posts *:before {
+            box-sizing: border-box;
+            transition: all 0.1s ease-out;
+        }
+    }
+}
+
+@mixin alert ($clr : 240) {
+    border: 1px solid hsl($clr , 100%, 50%);
+    background-color: black;
+    transition: 0.5s;
+    cursor: pointer;
+    border-left: thick solid hsl($clr, 100%, 50%);
+    color: hsl($clr, 100%, 40%);
+
+    margin: 10px auto;
+    padding: 10px;
+    padding-left: 20px;
+    text-align: left;
+
+    z-index: 5;
+    position: relative;
+    max-width: 700px;
+    min-height: 80px;
+
+    &:hover {
+        color: black;
+        background-color: hsl($clr, 100%, 84%);
+    }
+
+    .info-tab {
+        background-color: inherit;
+
+        border: 2px solid transparent;
+        border-color: inherit;
+        border-top-right-radius: 20%;
+        border-bottom-right-radius: 20%;
+        width: 45px;
+        position: absolute;
+        left: -29px;
+        text-align: center;
+        padding: 10px;
+
+        &::before {
+            width: 24px;
+            height: 24px;
+            box-shadow: inset 18px 0 13px rgba(0, 0, 0, 0.9);
+        }
+
+        &::after {
+            width: 0;
+            height: 0;
+            border: 12px solid transparent;
+            border-bottom-color: black;
+            border-left-color: black;
+        }
+
+        &::before,
+        &::after {
+            background-color: hsl($clr, 100%, 40%);
+            content: "";
+            position: absolute;
+            left: -2px;
+            bottom: -20px;
+            transform: rotateX(60deg);
+        }
+
+    }
+
+
+
+
+}
+
+@mixin forms($display: block, $padding: 20px 5%, $max: 100%) {
+    display: $display;
+    padding: $padding;
+    gap: 5px;
+    max-width: $max;
+    margin: 10px auto;
+
+    input,
+    button,
+    textarea,
+    select {
+        padding: 5px;
+        max-width: 100%;
+        background-color: transparent;
+        color: inherit;
+        border: solid 2px #666;
+        border-radius: 5px;
+    }
+
+    // @include buttons;
+
+}
+
+@mixin populars {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding-top: 100px;
+
+    .newest,
+    .liked,
+    .commented,
+    .visited {
+        background-color: rgba(0, 0, 0, 0.2);
+        margin: 5px auto;
+        padding: 5px;
+        border-radius: 5px;
+
+        h1 {
+            font-size: 1rem;
+            color: $bg-parallel;
+
+            i {
+                float: right;
+            }
+        }
+
+        section {
+            border-radius: inherit;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            margin: 10px auto;
+            font-size: 10px;
+
+            p {
+                font-size: 1rem;
+            }
+
+            div {
+                color: $bg-parallel;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+                display: block;
+            }
+        }
+
+    }
+}

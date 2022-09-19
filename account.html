@@ -1,0 +1,102 @@
+{% extends './template.html' %}
+
+{% block title %}account{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/account.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="main-center">
+    <div class="account">
+        <div class="header">
+            {% if session['wallpaper_user'] != "": %}
+                <img src="{{ session['wallpaper_user'] }}">
+            {% endif %}
+            <i class="fa-solid fa-pen-to-square"></i>
+            <div class="edit sub-menu">
+                <a href="/upload/wpurl"><b class="fa-solid fa-link"></b> Link</a>
+                <a href="/upload/wpupload"><b class="fa-solid fa-upload"></b> Unload </a>
+            </div>
+        </div>
+        <div class="profile">
+            <div class="foto">
+                {% if session['foto_user'] != "": %}
+                <img src="{{ session['foto_user'] }}">
+                {% else: %}
+                <figure>
+                    <strong>{{ session['name_user'][:1] }}</strong>
+                </figure>
+                {% endif %}
+                <i class="fa-solid fa-pen-to-square"></i>
+                <div class="edit sub-menu">
+                    <a href="/upload/fturl"><b class="fa-solid fa-link"></b> Link</a>
+                    <a href="/upload/ftupload"><b class="fa-solid fa-upload"></b> Upload</a>
+                </div>
+            </div>
+            <h1>{{ session["name_user"] }}</h1>
+            <summary>{{ session["about_user"] }}</summary>
+            <br>
+            <a href="/createpost" class="buttons">New Article</a>
+            <a href="/updateUser" class="buttons">Upate account</a>
+            <a href="mailto:{{ session['mail_user'] }}" class="buttons">Contact</a>
+
+            <div>
+                <ul>
+                    <li>
+                        <strong> {{ data['followers'] }}</strong>
+                        <span>Followers</span>
+                    </li>
+                    <li>
+                        <strong>{{ data['following'] }}</strong>
+                        <span>Following</span>
+                    </li>
+                    <li>
+                        {% if data['posts'][0][7] != NULL: %}
+                        <strong>{{ data['posts'][0][7] }}</strong>
+                        {% else: %}
+                        <strong>0</strong>
+                        {% endif %}
+                        <span>Posts</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path fill="#004242" fill-opacity="1" d="M0,32L720,224L1440,128L1440,320L720,320L0,320Z"></path>
+        </svg>
+        <div class="about">
+            <h3>About</h3>
+            <p>Mail: {{ session["mail_user"] }}</p>
+            <p>Since: {{ session["date_user"] }}</p>
+            {% if session['country_user'] != "" %}
+            <p>Country: {{ session["country_user"] }}</p>
+            {% endif %}
+            {% if session['phone_user'] != "" %}
+            <p>Phone: {{ session["phone_user"] }}</p>
+            {% endif %}
+            <summary>{{ session["about_user"] }}</summary>
+        </div>
+        <div class="cont-author" id="cont-author">
+            <br><br><br>
+            <h3>Other Posts:</h3>
+            {% for post in data['posts']: %}
+            {% if post[1] != NULL: %}
+
+                <figure class="other-posts" onclick="location.href='/post/{{ post[0] }}'">
+                    <figcaption>
+                        <p>{{ post[2] }}</p>
+                        <h3>{{ post[1] }}</h3>
+                        <h4>{{ post[5] }}</h4>
+                    </figcaption>
+                </figure>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

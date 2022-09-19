@@ -1,0 +1,385 @@
+@import "root", "mixins";
+
+header {
+    nav {
+        .main-menu {
+            text-align: right;
+            width: 100%;
+            background: bg-primary($tone);
+            padding: 10px ;
+            position: fixed;
+            top: 0;
+            transition: top 0.3s; /* Transition effect when sliding down (and up) */
+            box-shadow: 0 0 40px -10px #000;
+            color: $fg-light;
+            z-index: 50;
+            height:36px;
+
+            .menu-list {
+                position: absolute;
+                right: 5%;
+                top: 0;
+                display: flex;
+            i {
+                display: grid;
+                padding: 5px 10px;
+                position: relative;
+                cursor: pointer;
+                text-align: center;
+                margin-top: 5px;
+                transition: 1s;
+
+                &:hover {  
+                    margin-top: 0;
+                }          
+                &:hover span {            
+                    &:after {
+                        width: 100%;
+                        left: 0;
+                    }
+                }
+
+                span {
+                    font-size: 10px;
+                    width: 0px;
+                    overflow-y: hidden;
+                    &:after {
+                        position: absolute;
+                        transition: .3s;
+                        content: '';
+                        width: 0;
+                        left: 50%;
+                        bottom: 2px;
+                        height: 3px;
+                        background: $bg-parallel;
+                        border-radius: 5px;
+                    }
+                   
+                }
+
+                &:hover span {
+                    display: inline-flex;
+                    width: 100%;
+                    transition: .5s ease-in-out;
+
+                }
+            }}
+
+            .logo {
+                //  display: none;
+                position: absolute;
+                left: 4%;
+                display: flex;
+
+                img {
+                    height: 30px;
+                    transform: translateY(-7px);
+                }
+
+            }
+        }
+
+    }
+
+    .dropdown {
+        width: 90%;
+        background: #ddd;
+        border-radius: 4px;
+        box-shadow: 0 0 40px -10px #000;
+        color: #333;
+        margin-top: 40px;
+        display: none;
+        max-width: 300px;
+        transition: all .5s;
+        position: absolute;
+        z-index: 5;
+        right: 5%;
+
+        &:before {
+            bottom: 100%;
+            left: 80%;
+            border: solid transparent;
+            content: "";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-color: transparent;
+            border-bottom-color: #ddd;
+            border-width: 15px;
+            margin-left: -15px;
+        }
+
+        a,
+        p {
+            text-decoration: none;
+            display: block;
+            padding: 10px ;
+            margin: 0;
+            transition: all .1s;
+            color: #333;
+            text-align: left;
+            border-radius: 3px;
+
+            span {
+                float: right;
+            }
+
+            &:hover {
+                background: bg-primary($tone);
+                transform: scale(1.05);
+                color: #ddd;
+                box-shadow: 0 0 30px -10px #000
+            }
+        }
+    }
+}
+
+
+
+.display-block {
+    display: block;
+}
+
+
+.cont-body {
+
+    max-width: 100%;
+    display: inline-flex;
+    width: 100%;
+    margin-top: 50px;
+
+
+    .main-left {
+        width: 50%;
+
+    }
+
+    .main-center {
+        width: 100%;
+    }
+
+
+    .main-right {
+        width: 50%;
+
+    }
+
+    // &:nth-of-type(1) {
+    //     flex-grow: 1;
+    // }
+
+    // &:nth-of-type(2) {
+    //     flex-grow: 3;
+    // }
+
+    // &:nth-of-type(3) {
+    //     flex-grow: 2;
+    // }
+}
+.main-forms{
+        @include forms($display:grid, $max: 100%);
+        input[type=button],
+        input[type=submit],
+        button {
+            @include buttons($margin: 5px, $padding: 5px, $font-size: 1em);
+            margin: 0;
+            box-sizing: border-box;
+        }
+}
+
+
+
+.form-alert {
+    p {
+        text-align: left;
+
+        textarea {
+            // width: $width;
+            display: block;
+        }
+    }
+}
+
+
+footer {
+    background-color: rgba(0,0,0,0.5);
+
+    color: bg-primary($tone + 50);
+    width: 100%;
+    padding: 50px;
+
+    #backtotop {
+        position: fixed;
+        display: none;
+        bottom: 10px;
+        right: 15px;
+        font-size: 2em;
+        color: $bg-parallel;
+        z-index: 5;
+
+    }
+
+    ul {
+        li {
+            list-style: none;
+
+            img {
+                width: 50px;
+            }
+        }
+    }
+
+
+
+
+    .share,
+    .followme {
+        display: block;
+        gap: 5px;
+        margin: 50px auto;
+        text-align: center;
+
+        h3 {
+            padding: 1px;
+        }
+
+        a {
+            text-decoration: none;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 50%;
+            margin: auto;
+            color: $fg-light;
+            font-size: 1.3em;
+
+            &:hover {
+                // border: thin solid white;
+                font-size: 1.2em;
+            }
+        }
+
+        #whatsapp {
+            background-color: limegreen;
+        }
+
+        #facebook {
+            background-color: darkblue;
+        }
+
+        #twitter {
+            background-color: darkturquoise;
+        }
+
+        #youtube {
+            background-color: red;
+        }
+
+        #linkedin {
+            background-color: deepskyblue;
+        }
+
+        #pinterest {
+            background-color: #8c1616;
+        }
+
+        #mailbox {
+            background-color: dimgrey;
+        }
+
+        #reddit {
+            background-color: rgb(223, 88, 10);
+        }
+
+        #tumblr {
+            background-color: #06256a;
+        }
+
+        #instagram {
+            background-color: #990ce8;
+            background-image: linear-gradient(165deg, #990ce8 20%, #f015d4 50%, #ffc72e 100%);
+        }
+    }
+}
+
+
+@media only screen and (max-width: 800px) {
+    .cont-body {
+        display: grid;
+        .main-right, .main-left, .main-center{
+            width: 100%;
+        }
+
+    }
+}
+
+.notifications {
+    overflow-y: scroll;
+    padding: 5%;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: black;
+    color: $fg-light;
+    z-index: 55;
+    top: 0;
+    display: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    i.quit {
+        position: absolute;
+        padding: 5px;
+        border-radius: 50%;
+        cursor: pointer;
+        right: 5%;
+        top: 2%;
+        font-size: 2rem;
+        z-index: 50;
+        text-shadow: .5px .5px 0 rgb(172, 157, 157);
+    }
+
+    .date {
+        text-shadow: .5px .5px 0 black;
+        text-align: center;
+    }
+
+    span {
+        display: block;
+        width: 100%;
+        text-align: right;
+    }
+
+    .alerts-posts {
+        @include alert (120);
+    }
+
+    .alerts-users {
+        @include alert (180);
+    }
+
+    .alerts-followers {
+        @include alert (36);
+    }
+
+    .alerts-comments {
+        @include alert(240);
+    }
+
+    .alerts-posts_likes {
+        @include alert(285);
+    }
+
+    .alerts-comments_likes {
+        @include alert(35);
+    }
+
+    .alerts-reports {
+        @include alert(0);
+    }
+
+}

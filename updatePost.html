@@ -1,0 +1,30 @@
+{% extends 'template.html' %}
+
+{% block title %}create-post {% endblock %}
+
+{% block body %}
+
+
+<form  method="post" class="main-forms">
+  <label for="title">Title</label>
+  <input type="text" name="title" placeholder="Post title here..." value="{{ post['title'] }}">
+  <label for="category">Category</label>
+  <input type="text" name="category" placeholder="Post categories here..." value="{{ post['categories'] }}">
+  <input type="submit" value="Update">
+
+  <textarea name="post"  placeholder="Post content here...">{{ post['content'] }}</textarea>
+</form>
+{% endblock %}
+
+{% block js %}
+
+<script src="https://cdn.tiny.cloud/1/ctu01zz29dk3dpxzyu24iwskih23n8wb5nxka0w3z0xk6reh/tinymce/6/tinymce.min.js"
+  referrerpolicy="origin"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script>
+  $(function () {
+    tinyMCEX('textarea', 'oxide', 'document', 1000, true);
+  })
+</script>
+
+{% endblock %}

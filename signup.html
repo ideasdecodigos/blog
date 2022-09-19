@@ -1,0 +1,34 @@
+{%extends 'template.html' %}
+
+{% block title %}signup{% endblock%}
+
+{% block body %}
+
+    <form method="post" class="main-forms">
+        <h1>Signup</h1>
+        <label for="user">User</label>
+        <input type="text" placeholder="Enter full name" required name="username">
+        <label for="mail">Mail</label>
+        <input type="email" placeholder="Enter mail" required name="mail" id="mail">
+        <p id="info"></p>
+        <label for="pass">Password</label>
+        <input type="password" placeholder="Enter password" required name="password">
+        <input type="submit" value="Save">
+    </form>
+    <script>
+        $(function(){
+            $('#mail').keypress(function(){
+                $.ajax({
+                    url:'{{ url_for("verify_mail") }}',
+                    type:'post',
+                    data:{ 'mail': $(this).val() },
+                    success:function(data){
+                        $('#mail').css("background-color", data['color']);
+                        $('#info').text(data['info']);
+                    }
+                })
+            })
+        })
+    </script>
+
+{% endblock%}

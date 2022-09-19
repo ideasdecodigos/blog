@@ -1,0 +1,49 @@
+$bg-light: #FFFFFF;
+$bg-dark: #222222;
+$bg-parallel: #BB0069;
+$bg-primary: #004242;
+$tone: 15%;
+
+
+$fg-dark: #000000;
+$fg-light: #FFFFFF;
+
+$width: 100%;
+
+@function bg-primary($percent) {
+    $color: hsl(180, 100%, $percent);
+    @return $color
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    &::-webkit-scrollbar {
+        display: none;
+        }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.active{
+    color: $bg-parallel;    
+}
+
+.theme-default {
+    background-color: bg-primary($tone + 75);
+    color: $fg-dark;
+}
+
+.theme-light {
+    background-color: $bg-light;
+    color: $fg-dark;
+}
+
+.theme-dark {
+    background-color: $bg-dark;
+    color: $fg-light;
+}

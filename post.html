@@ -1,0 +1,394 @@
+{% extends './template.html' %}
+
+{% block title %}post{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}">
+{% endblock %}
+
+{% block body %}
+<script src="https://cdn.tiny.cloud/1/ctu01zz29dk3dpxzyu24iwskih23n8wb5nxka0w3z0xk6reh/tinymce/6/tinymce.min.js"
+    referrerpolicy="origin"></script>
+<div class="main-left">
+</div>
+<div class="main-center">
+
+    <nav class="cont-menu">
+        <a href="/forum"> <i class="fa-solid fa-globe"></i> Forum</a>
+        <a href="#cont-post"><i class="fa-solid fa-icons"></i> Post</a>
+        <a href="#cont-comments"><i class="fa-solid fa-comments"></i> Social</a>
+        <a href="#cont-addcomments"><i class="fa-solid fa-comment-dots"></i> Comments</a>
+        <a href="#cont-author"><i class="fa-solid fa-address-book"></i> Author</a>
+    </nav>
+
+    <div class="cont-post" id="cont-post" data-id="{{ post['id'] }}">
+        <strong>{{ post['date'] }}</strong>
+        <hr>
+
+        {% if post['author'] == session['id_user'] %}
+
+        <cite>Posted By: <a href="{{ url_for('account') }}">@{{ post['author_name'] }} »</a></cite>
+        {% else %}
+        <cite>By <a href="/profile/{{ post['author'] }}">@{{ post['author_name'] }}</a></cite>
+        {% endif %}
+        <h1>{{ post['title'] }}</h1>
+        <div class="socials">
+            <i class="fa-solid fa-thumbs-up btn-like"></i>
+            <i id="open-admin" onclick="$('.admin').toggle();$(this).toggleClass(' active');" class="fa fa-gear"></i>
+            <div class="admin">
+                <a href="javascript:void(0);" onclick="reportComments($('#cont-post').attr('data-id'),'posts');"><i
+                        class="fa fa-bug-slash"></i> </a>
+                {% if post['author'] == session['id_user'] %}
+                <a href="/updatepost/{{ post['id'] }}"><i class="fa fa-edit"></i> </a>
+                <a href="/deletepost/{{ post['id'] }}"><i class="fa fa-trash"></i> </a>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div class="cont-tags">
+            {% for tag in post['categories'].strip().split(' ') %}
+            <strong>#{{ tag }}</strong>
+            {% endfor %}
+        </div>
+        <script>
+            //meke each tag's background different
+            $(function () {
+                const vars = ['red', 'pink', 'blue', 'yellow', 'purple', 'brown', 'orange', 'lime','fucsia','green','lemon','grey', 'white', 'black'];
+
+                const tags = $('.cont-tags strong');
+                for (let i = 0; i < tags.length; i++) {
+                    $(tags[i]).css({'background': vars[(Math.floor(Math.random() * tags.length ))] });
+                }
+            })
+
+        </script>
+
+        <section>{{ post['content'] }}</section>
+
+        <div class="analytic"></div>
+    </div>
+    <hr>
+    <div class="cont-comments" id="cont-comments">
+        <h3>Answers and Comments</h3>
+        <div class="show-comments"></div>
+    </div>
+    <hr>
+    <div class="cont-addComments" id="cont-addcomments">
+        <h2>Leave a comment</h2>
+
+        {% if 'id_user' in session: %}
+        <form id="comment-form">
+            <input type="hidden" name="id_post" value="{{ post['id'] }}" required>
+            <input type="hidden" name="id_reply" id="id_reply">
+            <input type="hidden" name="text_reply" id="text_reply">
+            <div class="reply-comments">
+                <i class="fa-solid fa-link-slash" style="display:none"
+                    onclick="$('#id_reply, #text_reply').val('');$('#link_reply').text('');$(this).hide();"></i>
+                <i id="link_reply"></i>
+            </div>
+            <textarea name="comment" id="txt-comment" required placeholder="Leave a comment"></textarea>
+            <div class="socials">
+            <i Comment type="button" id="addNewComment" class="fa-solid fa-message"><strong> Comment</strong></i>
+            <i class="fa-solid fa-thumbs-up btn-like"></i> 
+           
+                <i class="fa-solid fa-share-nodes" onclick="$('.share').toggle();$(this).toggleClass(' active');"></i>
+            <div class="share">
+                <i class="fa-brands fa-whatsapp-square" id="whatsapp" data-action="share/whatsapp/share"></i>
+                <i class="fa-brands fa-facebook-square" onclick="javascript:compartirEnRedes('http://www.facebook.com/sharer.php?u=')"></i>
+                <i id="s-witter" class="fa-brands fa-twitter-square"onclick="javascript:compartirEnRedes('http://twitter.com/share?text=Teke a look at this website: &url=')"></i>
+                <i class="fa-brands fa-linkedin" onclick="javascript:compartirEnRedes('http://www.linkedin.com/shareArticle?mini=true&url=')"></i>
+                <i class="fa-brands fa-tumblr-square" onclick="javascript:compartirEnRedes('http://www.stumbleupon.com/badge/?url=')"></i>
+                <i class="fa-brands fa-pinterest-square"  onclick="javascript:shareTo('http://pinterest.com/pin/create/button/?url=','&media=../src/img/cute.jpg')"></i>
+                <i class="fa-brands fa-reddit-square" id="s-reddit" onclick="javascript:compartirEnRedes('http://www.reddit.com/submit?url=')"></i>
+                <i id="mailbox" class="fa fa-envelope"></i>
+                
+            </div>
+            <script type="text/javascript">
+                function compartirEnRedes(url) {
+                    window.open(url + window.location.href, 'sharer', 'toolbar=0,status=0,width=648,height=395');
+                    return true;
+                }
+                function shareTo(url, media) {
+                    window.open(url + window.location.href + media, 'sharer', 'toolbar=0,status=0,width=648,height=395');
+                    return true;
+                }
+                $(function () {
+                    document.getElementById('mailbox').href = "mailto:?subject=Teke a look at this website: &body=Teke a look at this website:  " + window.location.href + "\n\n";
+    
+                    if (screen.width < 700) {
+                        document.getElementById('whatsapp').href = "whatsapp://send?text=Teke a look at this website:  " + window.location.href;
+                    } else {
+                        document.getElementById('whatsapp').href = "https://web.whatsapp.com/send?text=Teke a look at this website: " + window.location.href;
+                    }
+                });            
+            </script>
+            </div>
+        </form>
+        {% else: %}
+        <a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('signup') }}">Signup</a> to react this post!
+        {% endif %}
+    </div>
+    <hr>
+    <div class="cont-author" id="cont-author">
+        <ul>
+            <li>Posted by: <a href="/profile/{{ post['author'] }}">@{{ post['author_name'] }} »</a></li>
+            <li><strong>Also read: </strong></li>
+        </ul>
+
+        {% for otherPosts in post['posts'] -%}
+        {% if otherPosts[0] != post['id'] -%}
+
+        <figure class="other-posts " onclick="location.href='/post/{{ otherPosts[0] }}'">
+            <figcaption>
+                <p>{{ otherPosts[2] }}</p>
+                <h3>{{ otherPosts[1] }}</h3>
+                <h4>@{{ otherPosts[5] }}</h4>
+            </figcaption>
+        </figure>
+
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<div class="main-right">
+    <div class="newest"></div>
+    <div class="visited"></div>
+    <div class="commented"></div>
+    <div class="liked"></div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/popular_posts.js') }}"></script>
+<script>
+    function likes() {
+        $.ajax({
+            url: "{{ url_for('getlikes') }}",
+            type: 'post',
+            data: { id_post: "{{ post['id'] }}" },
+            success: function (data) {
+                $('.analytic').html(`
+                            <span class="fa-solid fa-eye"> `+ data[1] + `</span>
+                            <span class="fa-solid fa-message"> `+ data[2] + `</span>
+                            <span class="fa-solid fa-thumbs-up"> `+ data[3] + `</span>
+                        `);
+            }
+        })
+    }
+
+    function switchCF(id, tag) {
+        if ("{{session['id_user'] }}" == "") {
+                Swal.fire({ icon: 'info', title: 'Sorry!', html: "<p>You must to <a href='/login'>login</a> or <a href='/signup'> signup</a> to like thist comment!</p>" })
+            } else {
+        $.ajax({
+            url: "{{ url_for('commentslikes') }}",
+            type: 'post',
+            data: { 'id_comment': id },
+            success: function (data) {
+                tag.text(" " + data)
+            }
+        })
+            }
+    }
+
+    function addComments() {
+        $.ajax({
+            url: "{{ url_for('addComment') }}",
+            type: 'post',
+            data: {
+                id_post: $('#comment-form input[name=id_post]').val(),
+                id_reply: $('#comment-form input[name=id_reply]').val(),
+                text_reply: $('#comment-form input[name=text_reply]').val(),
+                comment: tinyMCE.activeEditor.getContent()
+            },
+            success: function () {
+                $('.show-comments').html("");
+                document.getElementById("comment-form").reset();
+                showComments(); likes();
+            }
+        })
+    }
+
+    function delComments(id) {
+        Swal.fire({
+            icon: 'question',
+            title: 'Delete comment?',
+            text: "By clicking yes, you won't be able to revert the changes",
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ url_for('delComment') }}",
+                    type: 'post',
+                    data: {
+                        id_comment: id
+                    },
+                    success: function () {
+                        $('.show-comments').html("");
+                        showComments();
+                    }
+                })
+            }
+        })
+    }
+
+    function reportComments(id, sqltable) {
+        if ("{{session['id_user'] }}" == "") {
+            Swal.fire({ icon: 'warning', title: 'Sorry!', html: "<p>You must to <a href='/login'>login</a> or <a href='/signup'> signup</a> to report this " + sqltable + "</p>" })
+        } else {
+            Swal.fire({
+                icon: 'question',
+                html: `            
+            <div class="form-alert">
+                <strong>Reasons to stop seeing this comment?</strong>
+                <em><br>Is ... </em>
+                <p><input type="checkbox" value="inappropiate"> Inappropiate</p>
+                <p><input type="checkbox" value="Irrelevant"> Irrelevant</p>
+                <p><input type="checkbox" value="Repetitive"> Repetitive</p>
+                <p><input type="checkbox" value="Offensive"> Offensive</p>
+                <p><textarea placeholder="Add more info ..." rows="5"></textarea></p>
+                <i>We'll verify your info as soon as posible!</i>
+                <hr>
+                <span>Thank you for helping us to be better.<span>
+            </div>  `,
+                confirmButtonColor: '#666',
+                showCancelButton: true,
+                confirmButtonText: 'Send',
+
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    let actions = '';
+                    $(".form-alert input[type=checkbox]:checked").each(function () {
+                        actions = actions + ' ' + (this.value);
+                    });
+                    let info = $(".form-alert textarea").val();
+                    if (actions != "") {
+                        $.ajax({
+                            url: "{{ url_for('reports') }}",
+                            type: 'post',
+                            data: {
+                                actions: actions,
+                                info: info,
+                                origen: id,
+                                table: sqltable
+                            },
+                            success: function () {
+                                $('.show-comments #comment' + id).hide();
+                            }
+                        })
+                    } else {
+                        Swal.fire('Attention', 'You must select at least one option.', 'warning')
+                    }
+                }
+            })
+        }
+    }
+
+    function reply(content, id) {
+        location.href = '#cont-addcomments';
+        $('.reply-comments > i').show();
+        $('#text_reply').val(content);
+        $('#id_reply').val(id);
+        $('#link_reply').attr("href", "#comment" + id);
+        $('#link_reply').text(content);
+
+    }
+
+    function showComments() {
+        $.ajax({
+            url: "{{ url_for('showComments') }}",
+            type: 'post',
+            data: {
+                id_post: $('#cont-post').attr('data-id')
+            },
+            success: function (data) {
+                if (Object.keys(data).length === 0) {
+                    $('.show-comments').html(`<p> Be the first to react to this post!</p>`)
+                } else {
+                    for (const key in data) {
+                        if (Object.hasOwnProperty.call(data, key)) {
+                            const comment = data[key];
+                            let reply = "", admin = "", clAux = "", date = "";
+                            let profileLink = `<a href="/profile/` + comment[2] + `">` + comment[8].split(' ')[0] + `</a>`;
+
+                            let dataCont = "#" + comment[3].replace(/(<([^>]+)>)/ig, "");
+                            dataCont = dataCont.replace(/(\r\n|\n|\r)/gm, " ");
+                            dataCont = dataCont.replace("&nbsp;", '').slice(0, 100);
+
+                            if (comment[2] == "{{session['id_user'] }}") {
+                                admin = `<i onclick="delComments('` + comment[0] + `');" class="fa-solid fa-trash-can" ></i>`;
+                                profileLink = `<a href="/account">` + comment[8].split(' ')[0] + `</a>`;
+                                clAux = "class='cmt-root'";
+                            }
+                            if (comment[4] != '') {
+                                reply = `<p><a href="#comment` + comment[4] + `">` + comment[5] + `</a></p>`;
+                            }
+                            if (comment[6] != "") {
+                                date = '<center><Strong class="date">' + comment[6] + '</Strong></center><br>';
+                            }
+
+                            let commts = date + `
+                                                        
+                            <figure id="comment`+ comment[0] + `" ` + clAux + `>
+                            `+ reply + `
+                            <blockquote>
+                                `+ comment[3] + ` 
+                            </blockquote>
+                            <div class="author">
+                                <em>@`+ profileLink + `</em>
+                                <i class="fa-solid fa-link" onclick="reply('`+ dataCont + `','` + comment[0] + `');"></i> 
+                                <i onclick="switchCF(`+ comment[0] + `,$(this).children('i'))"><b class="fa-solid fa-heart"> </b><i>` + comment[9] + `</i></i>
+                                <div class='adm'> 
+                                    `+ admin + `
+                                    <i onclick="reportComments('` + comment[0] + `','comments');"  class="fa-solid fa-bug-slash"></i>
+                                </div>
+                                </div>
+                            </figure> 
+                            `;
+
+                            $('.show-comments').append(commts)
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+
+    $(function () {
+        likes();
+        showComments();
+        tinyMCEX('textarea', 'oxide', 'writer', 200, false);
+
+
+        $('.btn-like').click(function () {
+            if ("{{session['id_user'] }}" == "") {
+                Swal.fire({ icon: 'info', title: 'Sorry!', html: "<p>You must to <a href='/login'>login</a> or <a href='/signup'> signup</a> to like thist post!</p>" })
+            } else {
+                $.ajax({
+                    url: "{{ url_for('postslikes') }}",
+                    type: 'post',
+                    data: { 'id_post': "{{ post['id'] }}" },
+                    success: function (data) {
+                        // $('.btn-like i').text(" " + data)
+                        // $('.btn-like i').toggleClass("fa-thumbs-up fa-thumbs-down liked");
+                        $('.btn-like').toggleClass("liked");
+                        likes();
+                    }
+                })
+            }
+        });
+
+        $('#addNewComment').click(function () {
+            addComments();
+        })
+        
+        //POPULAR POSTS
+        show_popular_posts();
+   
+    })
+
+</script>
+{% endblock %}

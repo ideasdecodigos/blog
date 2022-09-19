@@ -1,0 +1,31 @@
+{% extends './template.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="marquee">
+    <ul class="marquee-content">
+        <li><i class="fa-brands fa-html5 fa-beat"></i></li>
+        <li><i class="fa-brands fa-css3"></i></li>
+        <li><i class="fa-brands fa-js"></i></li>
+        <li><i class="fa-solid fa-database"></i></li>
+        <li><i class="fa-brands fa-git-alt"></i></li>
+        <li><i class="fa-brands fa-python"></i></li>
+        <li><i class="fa-brands fa-php"></i></li>
+        <li><i class="fa-brands fa-java"></i></li>
+        <li><img src="../static/imgs/css-3.png" ></li>
+    </ul>
+</div>
+<br>
+
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/about.js') }}"></script>
+<script>marquee();</script>
+{% endblock %}

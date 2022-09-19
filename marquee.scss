@@ -1,0 +1,103 @@
+
+:root {
+  --marquee-width: 100vw;
+  --marquee-height: 10vh;
+  /* --marquee-elements: 12; defined with JavaScript */
+  --marquee-elements-displayed: 30;
+  --marquee-element-width: calc(var(--marquee-width) / var(--marquee-elements-displayed));
+  --marquee-animation-duration: calc(var(--marquee-elements) * 2s);
+ }
+
+.marquee {
+  width: 100%;
+  max-width: 100%;
+  height:70px;
+  background-color: #111;
+  color: #eee;
+  overflow: hidden;
+  position: relative;
+}
+.marquee:before, .marquee:after {
+  position: absolute;
+  top: 0;
+  width: 10rem;
+  height: 100%;
+  content: "";
+  z-index: 1;
+}
+.marquee:before {
+  left: 0;
+  background: linear-gradient(to right, #111 0%, transparent 100%);
+}
+.marquee:after {
+  right: 0;
+  background: linear-gradient(to left, #111 0%, transparent 100%);
+}
+.marquee-content {
+  list-style: none;
+  height: 100%;
+  display: flex;
+  animation: scrolling var(--marquee-animation-duration) linear infinite;
+}
+.marquee-content li img{
+  clip-path: circle(20px);
+  width: 60px;
+  transition: 0.5s;
+}
+.marquee-content li img:hover{
+  clip-path: circle(22px);
+}
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+@keyframes scrolling {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-1 * var(--marquee-element-width) * var(--marquee-elements))); }
+}
+.marquee-content li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
+  flex-shrink: 0;
+  width: var(--marquee-element-width);
+  max-height: 100%;
+  font-size: calc(var(--marquee-height)*3/4); /* 5rem; */
+  white-space: nowrap;
+
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.marquee-content li img {
+  border: 2px solid #eee;
+}
+.marquee-content li cite {
+  font-size: 12px;
+  position: absolute;
+  bottom: 2px;
+  
+}
+
+@media (max-width: 1000px) {
+  :root {
+    --marquee-elements-displayed: 25;
+  }
+  .marquee:before, .marquee:after { width: 3rem; }
+}
+
+
+@media (max-width: 700px) {
+  :root {
+    --marquee-elements-displayed: 20;
+  }
+}
+
+@media (max-width: 500px) {
+  :root {
+    --marquee-elements-displayed:25;
+  }
+}
+
+
+
